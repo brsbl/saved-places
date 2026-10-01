@@ -1,2 +1,6 @@
-data/saved-places.json
+.DS_Store
+node_modules/
+dist/
+coverage/
+toolchain-*/
 data/.geocode-cache.json
