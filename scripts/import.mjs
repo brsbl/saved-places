@@ -122,7 +122,7 @@ async function geocode(query, cache) {
   if (wait > 0) await new Promise(done => setTimeout(done, wait));
   lastRequest = Date.now();
   const response = await fetch(`https://nominatim.openstreetmap.org/search?${new URLSearchParams({ q: query, format: "jsonv2", limit: "1" })}`, {
-    headers: { "User-Agent": "bb-plugin-saved-places-import (https://github.com/brsbl/bb-plugins)" },
+    headers: { "User-Agent": "bb-plugin-saved-places-import (https://github.com/brsbl/saved-places)" },
   });
   if (!response.ok) throw new Error(`Nominatim returned ${response.status} for "${query}"`);
   const [hit] = await response.json();

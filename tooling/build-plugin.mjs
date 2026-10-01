@@ -1,0 +1,46 @@
+import { readFile, writeFile } from "node:fs/promises";
+import { dirname, relative, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import {
+  buildPluginApp,
+  buildPluginServer,
+  resolvePluginBuildToolchain,
+} from "./vendor/bb-plugin-build-0.43.4.mjs";
+import { pluginBuildBbVersion } from "./plugin-build-provenance.mjs";
+
+const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const arguments_ = process.argv.slice(2);
+const appOnly = arguments_[0] === "--app-only";
+const pluginArgument = arguments_[appOnly ? 1 : 0];
+if (appOnly && pluginArgument === undefined) {
+  throw new Error("--app-only requires a plugin path");
+}
+const pluginPath = resolve(pluginArgument ?? process.cwd());
+
+const toolchain = await resolvePluginBuildToolchain(repositoryRoot);
+const files = [];
+if (!appOnly) {
+  const server = await buildPluginServer(
+    pluginPath,
+    pluginBuildBbVersion,
+    toolchain,
+  );
+  const map = await readFile(server.mapPath, "utf8");
+  const portableRoot = relative(dirname(server.mapPath), repositoryRoot);
+  await writeFile(
+    server.mapPath,
+    map.replaceAll(`:${repositoryRoot}/`, `:${portableRoot}/`),
+  );
+  files.push(server.jsPath, server.mapPath, server.metaPath);
+}
+const manifest = JSON.parse(
+  await readFile(resolve(pluginPath, "package.json"), "utf8"),
+);
+if (typeof manifest.bb?.app === "string") {
+  const app = await buildPluginApp(pluginPath, pluginBuildBbVersion, toolchain);
+  files.push(app.jsPath, app.cssPath, app.metaPath);
+} else if (appOnly) {
+  throw new Error(`${manifest.name}: --app-only requires bb.app`);
+}
+
+for (const file of files) console.log(file);
