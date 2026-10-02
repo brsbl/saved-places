@@ -28,47 +28,47 @@ describe("category taxonomy", () => {
 
   it("refines broad stored categories from the place type or name", () => {
     expect(resolveCategory({ category: "culture", placeType: "Art museum", name: "Mori Art Museum", address: "" })).toBe("museum");
-    expect(resolveCategory({ category: "culture", placeType: "Shinto shrine", name: "Meiji Jingu", address: "" })).toBe("shrine");
+    expect(resolveCategory({ category: "culture", placeType: "Shinto shrine", name: "Kitsune Shrine", address: "" })).toBe("shrine");
     expect(resolveCategory({ category: "outdoors", placeType: "Theme park", name: "Fuji-Q", address: "" })).toBe("amusement");
-    expect(resolveCategory({ category: "other", placeType: null, name: "Disk Union Record Store", address: "" })).toBe("records");
+    expect(resolveCategory({ category: "other", placeType: null, name: "Groove Record Store", address: "" })).toBe("records");
     expect(resolveCategory({ category: "music", placeType: "Music bar", name: "JBS", address: "" })).toBe("music");
     expect(resolveCategory({ category: "ramen", placeType: "Sushi restaurant", name: "Ichiran", address: "" })).toBe("ramen");
     expect(resolveCategory({ category: "other", placeType: null, name: "Somewhere", address: "" })).toBe("other");
   });
 
   it.each([
-    ["Bar", "JAM Record Bar", "bars"],
-    ["Dessert restaurant", "Azuki to Kōri", "dessert"],
-    ["Restaurant", "Sushi Sho", "sushi"],
-    ["Restaurant", "Koloa Fish Market", "food"],
-    ["Standing sushi bar", "Uogashi Nihon-Ichi", "sushi"],
+    ["Bar", "Groove Record Bar", "bars"],
+    ["Dessert restaurant", "Kōri Corner", "dessert"],
+    ["Restaurant", "Sushi Hana", "sushi"],
+    ["Restaurant", "Harbor Fish Market", "food"],
+    ["Standing sushi bar", "Tachigui Kaze", "sushi"],
     ["Sports bar", "The Local", "bars"],
-    ["Cafe & bar", "Dug Jazz Cafe & Bar", "music"],
-    ["Kitchen supply store", "Kama-Asa", "shop"],
-    ["Dojo restaurant", "Dojo", "food"],
-    ["Swimwear store", "Seafolly", "fashion"],
-    ["Observation deck", "Tokyo Tower", "viewpoint"],
-    [null, "Mitsui Garden Hotel Kyoto", "stays"],
-    [null, "Shoe Palace", "fashion"],
-    [null, "Beach Road Scissors Cut Curry Rice", "food"],
-    [null, "Skinny's Lounge", "bars"],
-    [null, "Taishan Cuisine", "food"],
-    [null, "Song Fa Bak Kut Teh 11 New Bridge Road", "food"],
+    ["Cafe & bar", "Moonlight Jazz Cafe & Bar", "music"],
+    ["Kitchen supply store", "Hamono Knives", "shop"],
+    ["Dojo restaurant", "Dojo Table", "food"],
+    ["Swimwear store", "Coral Swim Co.", "fashion"],
+    ["Observation deck", "Harbor Tower", "viewpoint"],
+    [null, "Riverside Garden Hotel", "stays"],
+    [null, "Sneaker Palace", "fashion"],
+    [null, "Beach Road Curry House", "food"],
+    [null, "Lucky's Lounge", "bars"],
+    [null, "Golden Lantern Cuisine", "food"],
+    [null, "Ah Seng Bak Kut Teh 12 Harbor Road", "food"],
   ] as const)("puts a %s named %s in %s", (placeType, name, expected) => {
     expect(resolveCategory({ category: "other", placeType, name, address: "" })).toBe(expected);
   });
 
   it("files bare addresses and dropped pins under Addresses, and Google neighborhoods under Neighborhoods", () => {
     const resolve = (name: string, address = "", placeType: string | null = null) => resolveCategory({ category: "other", placeType, name, address });
-    expect(resolve("190 Elizabeth St", "190 Elizabeth St, New York, NY 10012")).toBe("address");
-    expect(resolve("34 Nonhyeon-ro 152-gil")).toBe("address");
-    expect(resolve("Via San Paolo, 34")).toBe("address");
-    expect(resolve("251 Compostela", "251 Compostela, La Habana, Cuba")).toBe("address");
-    expect(resolve(`31°13'22.6"N 121°28'11.4"E`)).toBe("address");
-    expect(resolve("7 Adams", "1963 Sutter St, San Francisco")).toBe("other");
-    expect(resolve("001", "Tai Kwun, Hollywood Rd")).toBe("other");
-    expect(resolveCategory({ category: "food", placeType: null, name: "7 Adams", address: "1963 Sutter St" })).toBe("food");
-    expect(resolve("Shimokitazawa", "", "Neighborhood")).toBe("neighborhood");
+    expect(resolve("123 Example St", "123 Example St, Springfield, IL 62701")).toBe("address");
+    expect(resolve("12 Saemmul-ro 34-gil")).toBe("address");
+    expect(resolve("Via Esempio, 12")).toBe("address");
+    expect(resolve("77 Ficticia", "77 Ficticia, Ciudad Ejemplo")).toBe("address");
+    expect(resolve(`10°00'00.0"N 20°00'00.0"E`)).toBe("address");
+    expect(resolve("9 Lanterns", "500 Market Ave, Springfield")).toBe("other");
+    expect(resolve("042", "Old Mill, Harbor Rd")).toBe("other");
+    expect(resolveCategory({ category: "food", placeType: null, name: "9 Lanterns", address: "500 Market Ave" })).toBe("food");
+    expect(resolve("Old Town", "", "Neighborhood")).toBe("neighborhood");
   });
 
   it("keeps each original broad filter id matching what it matched before the taxonomy grew", () => {

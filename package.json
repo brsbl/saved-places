@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Your saved places on a map that gets clearer as you zoom, with lists, notes, travel times, and an Ask agent button.",
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "files": [
     "assets",
     "dist",
