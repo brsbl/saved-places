@@ -1,6 +1,6 @@
 # Saved Places
 
-All your saved Google Maps places on one map you'll actually use. Paste one prompt into [bb](https://getbb.app) and an agent:
+All your saved Google Maps places on one map you'll actually use. Paste one prompt into [bb](https://getbb.app/?utm_source=github&utm_campaign=saved-places) and an agent:
 - opens Google Maps in bb's browser so you can sign in;
 - pulls every saved list, with coordinates, into your own copy of this template;
 - sorts each place into a category, like ramen, record stores, or viewpoints.
@@ -13,7 +13,7 @@ You get lists, notes, walking distance between places, and an **Ask agent** butt
 
 Requires **Claude Code or Codex installed and signed in locally** on your computer.
 
-1. [Download bb](https://getbb.app).
+1. [Download bb](https://getbb.app/?utm_source=github&utm_campaign=saved-places).
 2. Paste this into a new thread:
 
 ```text
